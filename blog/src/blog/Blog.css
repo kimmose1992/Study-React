@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-.blog-nav {
+.Blog-nav {
   display: flex;
   background: black;
   width: 100%;
@@ -10,13 +10,13 @@
   padding-left: 20px;
 }
 
-.blog-list {
+.Blog-list {
   padding-left: 20px;
   text-align: left;
   border-bottom: 1px solid gray;
 }
 
-.blog-modal {
+.Blog-modal {
   margin-top: 20px;
   padding: 20px;
   background: #eee;
