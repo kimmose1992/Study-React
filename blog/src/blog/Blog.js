@@ -39,12 +39,16 @@ function Blog() {
   
     return (
       <div className="Blog">
+
+        { /* Blog Header */ }
         <div className="blog-nav">
           <h4>
 						<span onClick={ changeBlogTitle }>{ blogTitle }</span> 
 						<span style={{ color: 'white' }} onClick={() => { sortListTitle() }}> ✅Sort</span>
 					</h4>        
         </div>
+
+        { /* Blog List */ }
         <div className='blog-list'>
           <h4>{ listTitle[0] } <span onClick={() => { addLikeCnt(0) }}>👍</span> { likeCnt[0] } </h4>
           <p>2022.12.12</p>        
