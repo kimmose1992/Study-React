@@ -6,7 +6,7 @@ function Blog() {
   let [blogTitle] = useState('React Blog');
   let [listTitle, setListTitle] = useState(['List Title 03', 'List Title 02', 'List Title 01']);
   let [likeCnt, setLikeCnt] = useState([0, 0, 0]);
-  let [isModal, setIsModal] = useState(false);
+  let [modalView, setModalView] = useState([false, -1]);
 
   /*
   const sortListTitle = () => {
@@ -38,11 +38,22 @@ function Blog() {
     setListTitle(copyListTitle);
   }
 
-  function blogModalView() {
-    //console.log(isModal);
-    //let copyIsModal = [...isModal];
-    //copyIsModal = isModal ? false : true;
-    setIsModal(isModal ? false : true);
+  function blogModalView(idx) {
+    
+    let copyModalView = [...modalView];
+    let isModal = copyModalView[0];
+    let modalIdx = copyModalView[1];
+
+    if (modalIdx == idx){
+      isModal = false;
+    } else {
+      isModal = true;
+      modalIdx = idx;
+    }
+
+    copyModalView[0] = isModal;
+    copyModalView[1] = modalIdx;
+    setModalView(copyModalView);
   }
 
   return (
@@ -55,34 +66,36 @@ function Blog() {
       </div>
 
       { /* Blog List */ }
-      <div className='Blog-list'>
-        <h4>
-          <span onClick={ blogModalView }>{ listTitle[0] }</span> 
-          <span onClick={() => { addLikeCnt(0) }}>👍</span> { likeCnt[0] } 
-        </h4>
-        <p>2022.12.12</p>        
-      </div>
-      <div className='Blog-list'>
-        <h4>{ listTitle[1] } <span onClick={ () => { addLikeCnt(1) }}>👍</span> { likeCnt[1] } </h4>
-        <p>2022.12.12</p>        
-      </div>
-      <div className='Blog-list'>
-        <h4>{ listTitle[2] } <span onClick={ () => { addLikeCnt(2) }}>👍</span> { likeCnt[2] } </h4>
-        <p>2022.12.12</p>        
-      </div>
+      {
+        listTitle.map(function(data, idx){
+          return (
+            <div key={ data } title={ listTitle[idx] } className='Blog-list'>
+              <h4>
+                <span onClick={() => { blogModalView(idx) }}>{ listTitle[idx] }</span> 
+                <span onClick={() => { addLikeCnt(idx) }}> 👍</span> { likeCnt[idx] } 
+              </h4>
+              <p>2022.12.12</p>        
+            </div>
+          )
+        })
+      }
 
       { /* Blog Modal */ }
-      { isModal ? <BlogModal /> : null }
+      { 
+        modalView[0] ? <BlogModal listTitle={ listTitle[modalView[1]] } /> : null 
+      }
     </div>
   );
 }
 
-function BlogModal() {
+function BlogModal(props) {
   return (
-    <div className='Blog-modal'>
-      <h4>제목</h4>
-      <p>내용</p>
-      <p>등록일자</p>      
+    <div className='BlogModal'>
+      <div className='Blog-modal'>
+        <h4>제목: { props.listTitle }</h4>
+        <p>내용</p>
+        <p>등록일자</p>      
+      </div>
     </div>
   )
 }
