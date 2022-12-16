@@ -1,5 +1,5 @@
 import './Blog.css';
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 function Blog() {
 
@@ -7,6 +7,9 @@ function Blog() {
   let [listTitle, setListTitle] = useState(['List Title 03', 'List Title 02', 'List Title 01']);
   let [likeCnt, setLikeCnt] = useState([0, 0, 0]);
   let [modalView, setModalView] = useState([false, -1]);
+
+  let writeTitle = '';
+  let writeInput = useRef();
 
   /*
   const sortListTitle = () => {
@@ -30,6 +33,12 @@ function Blog() {
     let copyLikeCnt =  [...likeCnt];
     copyLikeCnt[idx]++;
     setLikeCnt(copyLikeCnt);
+  }
+
+  function modListTitle(idx) {
+    let copyListTitle = [...listTitle];
+    copyListTitle[idx] = copyListTitle[idx] + ' Change';
+    setListTitle(copyListTitle);
   }
 
   function sortListTitle() {
@@ -56,6 +65,23 @@ function Blog() {
     setModalView(copyModalView);
   }
 
+  function blogWrite() {
+    
+    if (writeTitle == '') {
+      alert('제목을 입력해주세요.');
+    } else {
+      let copyListTitle = [...listTitle];
+      copyListTitle.unshift(writeTitle);
+      setListTitle(copyListTitle);
+
+      let copyLikeCnt = [...likeCnt];
+      copyLikeCnt.unshift(0);
+      setLikeCnt(copyLikeCnt);
+
+      writeInput.current.value = '';
+    }
+  }
+
   return (
     <div className="Blog">
 
@@ -80,9 +106,18 @@ function Blog() {
         })
       }
 
+      { /* Blog Write */ }
+      <div className="Blog-nav">
+        <input type='text' ref={ writeInput } onBlur={(e) => {  
+          writeTitle = e.target.value;
+        }}></input>
+        <button onClick={() => { blogWrite() }}>글등록</button>
+        <button onClick={() => { console.log(1) }}>초기화</button>
+      </div>
+
       { /* Blog Modal */ }
       { 
-        modalView[0] ? <BlogModal listTitle={ listTitle[modalView[1]] } /> : null 
+        modalView[0] ? <BlogModal listTitle={ listTitle } idx={ modalView[1] } modListTitle={ modListTitle } /> : null 
       }
     </div>
   );
@@ -92,9 +127,10 @@ function BlogModal(props) {
   return (
     <div className='BlogModal'>
       <div className='Blog-modal'>
-        <h4>제목: { props.listTitle }</h4>
+        <h4>제목: { props.listTitle[props.idx] }</h4>
         <p>내용</p>
         <p>등록일자</p>      
+        <button onClick={() => props.modListTitle(props.idx) }>제목 수정</button>
       </div>
     </div>
   )
